@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Lista Alunos</string>
+    <string name="titulo_app_bar_lista_alunos">Lista de Alunos</string>
+    <string name="adiciona_nome">Nome</string>
+    <string name="adiciona_telefone">Telefone</string>
+    <string name="adiciona_email">Email</string>
+    <string name="adiciona_salvar">Salvar</string>
+    <string name="remover">Remover</string>
+    <string name="item_aluno_telefone">Telefone: %s</string>
+    <string name="item_aluno_nome">Nome: %s</string>
+    <string name="alert_dialog_title_remove_aluno">Removendo aluno</string>
+    <string name="alert_dialog_message_remove_aluno">Deseja realmente remover o aluno?</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
+</resources>
