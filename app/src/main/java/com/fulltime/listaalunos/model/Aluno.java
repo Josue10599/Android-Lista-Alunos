@@ -1,17 +1,20 @@
 package com.fulltime.listaalunos.model;
 
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
+@Entity
 public class Aluno implements Serializable {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
     private String nome;
     private String telefone;
     private String email;
-    private int id;
 
     public Aluno() {
-
     }
 
     public String getNome() {
@@ -44,11 +47,11 @@ public class Aluno implements Serializable {
         return getNome();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
