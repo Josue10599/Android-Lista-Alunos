@@ -2,19 +2,19 @@ package com.fulltime.listaalunos.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.fulltime.listaalunos.R;
-import com.fulltime.listaalunos.dao.AlunoDAO;
 import com.fulltime.listaalunos.model.Aluno;
 import com.fulltime.listaalunos.ui.ListViewAlunos;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ListaAlunosActivity extends AppCompatActivity {
 
@@ -25,7 +25,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_alunos);
-        this.listViewAlunos = new ListViewAlunos(this, new AlunoDAO());
+        this.listViewAlunos = new ListViewAlunos(this);
         configuraActionBar();
         configuraLista();
         configuraBotaoAdicionar();

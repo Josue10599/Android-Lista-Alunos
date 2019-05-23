@@ -2,13 +2,15 @@ package com.fulltime.listaalunos.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.fulltime.listaalunos.R;
-import com.fulltime.listaalunos.dao.AlunoDAO;
+import com.fulltime.listaalunos.database.DataBase;
+import com.fulltime.listaalunos.database.dao.AlunoDao;
 import com.fulltime.listaalunos.model.Aluno;
 
 public class AdicionaAlunoActivity extends AppCompatActivity {
@@ -36,7 +38,7 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.activity_adiciona_aluno_menu_salvar) {
-            AlunoDAO dao = new AlunoDAO();
+            AlunoDao dao = DataBase.getInstance(this).getAlunoDao();
             aluno = getAluno();
             if (aluno.idValido()) {
                 dao.edita(aluno);

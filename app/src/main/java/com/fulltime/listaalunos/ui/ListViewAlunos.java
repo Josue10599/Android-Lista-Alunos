@@ -2,13 +2,15 @@ package com.fulltime.listaalunos.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import androidx.appcompat.app.AlertDialog;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.fulltime.listaalunos.R;
-import com.fulltime.listaalunos.dao.AlunoDAO;
+import com.fulltime.listaalunos.database.DataBase;
+import com.fulltime.listaalunos.database.dao.AlunoDao;
 import com.fulltime.listaalunos.model.Aluno;
 import com.fulltime.listaalunos.ui.adapter.AlunosAdapter;
 
@@ -16,11 +18,11 @@ public class ListViewAlunos {
 
     private final AlunosAdapter alunosAdapter;
     private final Context context;
-    private final AlunoDAO db;
+    private final AlunoDao db;
 
-    public ListViewAlunos(Context context, AlunoDAO db) {
+    public ListViewAlunos(Context context) {
         this.context = context;
-        this.db = db;
+        this.db = DataBase.getInstance(context).getAlunoDao();
         this.alunosAdapter = new AlunosAdapter(context, db.getAlunos());
     }
 
@@ -47,6 +49,6 @@ public class ListViewAlunos {
     }
 
     public void atualizaLista() {
-        alunosAdapter.atualizaAlunos(new AlunoDAO().getAlunos());
+        alunosAdapter.atualizaAlunos(db.getAlunos());
     }
 }
