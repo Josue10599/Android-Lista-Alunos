@@ -48,7 +48,7 @@ public class AlunosAdapter extends BaseAdapter {
     }
 
     private View criaView(ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.item_aluno, parent,false);
+        return LayoutInflater.from(context).inflate(R.layout.item_aluno, parent, false);
     }
 
     private void getTelefone(int position, View view) {

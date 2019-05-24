@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 @Entity
 public class Aluno implements Serializable {
@@ -13,9 +14,7 @@ public class Aluno implements Serializable {
     private String nome;
     private String telefone;
     private String email;
-
-    public Aluno() {
-    }
+    private Calendar momentoDeCriacao = Calendar.getInstance();
 
     public String getNome() {
         return nome;
@@ -58,4 +57,13 @@ public class Aluno implements Serializable {
     public boolean idValido() {
         return id > 0;
     }
+
+    public Calendar getMomentoDeCriacao() {
+        return momentoDeCriacao;
+    }
+
+    public void setMomentoDeCriacao(Calendar momentoDeCriacao) {
+        this.momentoDeCriacao = momentoDeCriacao;
+    }
+
 }

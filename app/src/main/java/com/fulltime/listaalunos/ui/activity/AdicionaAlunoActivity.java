@@ -16,9 +16,9 @@ import com.fulltime.listaalunos.model.Aluno;
 public class AdicionaAlunoActivity extends AppCompatActivity {
 
     private static final String ALUNO = "aluno";
-    private EditText campoEmail;
-    private EditText campoTelefone;
     private EditText campoNome;
+    private EditText campoTelefone;
+    private EditText campoEmail;
     private Aluno aluno;
 
     @Override
