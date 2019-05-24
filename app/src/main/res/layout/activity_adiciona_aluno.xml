@@ -22,16 +22,29 @@
             tools:targetApi="o" />
 
         <EditText
-            android:id="@+id/adiciona_aluno_telefone"
+            android:id="@+id/adiciona_aluno_telefone_fixo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:hint="@string/adiciona_telefone"
+            android:hint="@string/adiciona_telefone_fixo"
             android:importantForAutofill="no"
             android:inputType="phone"
             app:layout_constraintEnd_toEndOf="@+id/adiciona_aluno_nome"
             app:layout_constraintStart_toStartOf="@+id/adiciona_aluno_nome"
             app:layout_constraintTop_toBottomOf="@+id/adiciona_aluno_nome"
+            tools:targetApi="o" />
+
+        <EditText
+            android:id="@+id/adiciona_aluno_telefone_celular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:hint="@string/adiciona_telefone_celular"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            app:layout_constraintEnd_toEndOf="@+id/adiciona_aluno_telefone_fixo"
+            app:layout_constraintStart_toStartOf="@+id/adiciona_aluno_telefone_fixo"
+            app:layout_constraintTop_toBottomOf="@+id/adiciona_aluno_telefone_fixo"
             tools:targetApi="o" />
 
         <EditText
@@ -42,9 +55,9 @@
             android:hint="@string/adiciona_email"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="@+id/adiciona_aluno_telefone"
-            app:layout_constraintStart_toStartOf="@+id/adiciona_aluno_telefone"
-            app:layout_constraintTop_toBottomOf="@+id/adiciona_aluno_telefone"
+            app:layout_constraintEnd_toEndOf="@+id/adiciona_aluno_telefone_celular"
+            app:layout_constraintStart_toStartOf="@+id/adiciona_aluno_telefone_celular"
+            app:layout_constraintTop_toBottomOf="@+id/adiciona_aluno_telefone_celular"
             tools:targetApi="o" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

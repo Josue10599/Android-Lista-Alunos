@@ -12,10 +12,11 @@ public class Aluno implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private String nome;
-    private String telefone;
+    private String telefoneFixo;
+    private String telefoneCelular;
     private String email;
-    private Calendar momentoDeCriacao = Calendar.getInstance();
 
+    private Calendar momentoDeCriacao = Calendar.getInstance();
     public String getNome() {
         return nome;
     }
@@ -24,12 +25,20 @@ public class Aluno implements Serializable {
         this.nome = nome;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getTelefoneFixo() {
+        return telefoneFixo;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setTelefoneFixo(String telefoneFixo) {
+        this.telefoneFixo = telefoneFixo;
+    }
+
+    public String getTelefoneCelular() {
+        return telefoneCelular;
+    }
+
+    public void setTelefoneCelular(String telefoneCelular) {
+        this.telefoneCelular = telefoneCelular;
     }
 
     public String getEmail() {

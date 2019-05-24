@@ -31,5 +31,21 @@ class DataBaseMigration {
             database.execSQL("ALTER TABLE Aluno ADD COLUMN momentoDeCriacao INTEGER;");
         }
     };
-    static final Migration[] MIGRATIONS = {MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4};
+    private static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `new_aluno` (" +
+                    "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "`nome` TEXT, " +
+                    "`telefoneFixo` TEXT, " +
+                    "`telefoneCelular` TEXT, " +
+                    "`email` TEXT, " +
+                    "`momentoDeCriacao` INTEGER)");
+            database.execSQL("INSERT INTO new_aluno (id, nome, telefoneCelular, email) " +
+                    "SELECT id, nome, telefone, email FROM Aluno;");
+            database.execSQL("DROP TABLE Aluno");
+            database.execSQL("ALTER TABLE new_aluno RENAME TO Aluno");
+        }
+    };
+    static final Migration[] MIGRATIONS = {MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5};
 }

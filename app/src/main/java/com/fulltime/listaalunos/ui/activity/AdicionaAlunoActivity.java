@@ -16,8 +16,10 @@ import com.fulltime.listaalunos.model.Aluno;
 public class AdicionaAlunoActivity extends AppCompatActivity {
 
     private static final String ALUNO = "aluno";
+
     private EditText campoNome;
-    private EditText campoTelefone;
+    private EditText campoTelefoneFixo;
+    private EditText campoTelefoneCelular;
     private EditText campoEmail;
     private Aluno aluno;
 
@@ -62,19 +64,22 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
 
     private void configuraComponentes() {
         campoEmail = findViewById(R.id.adiciona_aluno_email);
-        campoTelefone = findViewById(R.id.adiciona_aluno_telefone);
+        campoTelefoneFixo = findViewById(R.id.adiciona_aluno_telefone_fixo);
+        campoTelefoneCelular = findViewById(R.id.adiciona_aluno_telefone_celular);
         campoNome = findViewById(R.id.adiciona_aluno_nome);
     }
 
     private void preencheAluno(Aluno aluno) {
         campoNome.setText(aluno.getNome());
-        campoTelefone.setText(aluno.getTelefone());
+        campoTelefoneFixo.setText(aluno.getTelefoneFixo());
+        campoTelefoneCelular.setText(aluno.getTelefoneCelular());
         campoEmail.setText(aluno.getEmail());
     }
 
     private Aluno getAluno() {
         aluno.setNome(getNome());
-        aluno.setTelefone(getTelefone());
+        aluno.setTelefoneFixo(getTelefoneFixo());
+        aluno.setTelefoneCelular(getTelefoneCelular());
         aluno.setEmail(getEmail());
         return aluno;
     }
@@ -83,8 +88,12 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
         return campoEmail.getText().toString();
     }
 
-    private String getTelefone() {
-        return campoTelefone.getText().toString();
+    private String getTelefoneFixo() {
+        return campoTelefoneFixo.getText().toString();
+    }
+
+    private String getTelefoneCelular() {
+        return campoTelefoneCelular.getText().toString();
     }
 
     private String getNome() {
