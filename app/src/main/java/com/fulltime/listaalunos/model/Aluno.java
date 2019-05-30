@@ -12,8 +12,6 @@ public class Aluno implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private String nome;
-    private String telefoneFixo;
-    private String telefoneCelular;
     private String email;
 
     private Calendar momentoDeCriacao = Calendar.getInstance();
@@ -23,22 +21,6 @@ public class Aluno implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getTelefoneFixo() {
-        return telefoneFixo;
-    }
-
-    public void setTelefoneFixo(String telefoneFixo) {
-        this.telefoneFixo = telefoneFixo;
-    }
-
-    public String getTelefoneCelular() {
-        return telefoneCelular;
-    }
-
-    public void setTelefoneCelular(String telefoneCelular) {
-        this.telefoneCelular = telefoneCelular;
     }
 
     public String getEmail() {

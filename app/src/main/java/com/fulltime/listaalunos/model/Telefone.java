@@ -1,4 +1,53 @@
 package com.fulltime.listaalunos.model;
 
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
+
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity
 public class Telefone {
+    @PrimaryKey
+    private long id;
+    private String numero;
+    private TipoTelefone tipo;
+    @ForeignKey(entity = Aluno.class,
+            parentColumns = "id",
+            childColumns = "idAluno",
+            onDelete = CASCADE,
+            onUpdate = CASCADE)
+    private long idAluno;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public TipoTelefone getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoTelefone tipo) {
+        this.tipo = tipo;
+    }
+
+    public long getIdAluno() {
+        return idAluno;
+    }
+
+    public void setIdAluno(long idAluno) {
+        this.idAluno = idAluno;
+    }
 }

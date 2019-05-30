@@ -71,15 +71,15 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
 
     private void preencheAluno(Aluno aluno) {
         campoNome.setText(aluno.getNome());
-        campoTelefoneFixo.setText(aluno.getTelefoneFixo());
-        campoTelefoneCelular.setText(aluno.getTelefoneCelular());
+//        campoTelefoneFixo.setText(aluno.getTelefoneFixo());
+//        campoTelefoneCelular.setText(aluno.getTelefoneCelular());
         campoEmail.setText(aluno.getEmail());
     }
 
     private Aluno getAluno() {
         aluno.setNome(getNome());
-        aluno.setTelefoneFixo(getTelefoneFixo());
-        aluno.setTelefoneCelular(getTelefoneCelular());
+//        aluno.setTelefoneFixo(getTelefoneFixo());
+//        aluno.setTelefoneCelular(getTelefoneCelular());
         aluno.setEmail(getEmail());
         return aluno;
     }
