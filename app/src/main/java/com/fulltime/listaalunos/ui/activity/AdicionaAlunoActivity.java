@@ -14,6 +14,9 @@ import com.fulltime.listaalunos.database.dao.AlunoDao;
 import com.fulltime.listaalunos.database.dao.TelefoneDao;
 import com.fulltime.listaalunos.model.Aluno;
 import com.fulltime.listaalunos.model.Telefone;
+import com.fulltime.listaalunos.model.TipoTelefone;
+
+import java.util.List;
 
 import static com.fulltime.listaalunos.model.TipoTelefone.TELEFONE_CELULAR;
 import static com.fulltime.listaalunos.model.TipoTelefone.TELEFONE_FIXO;
@@ -27,11 +30,15 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
     private EditText campoTelefoneCelular;
     private EditText campoEmail;
     private Aluno aluno;
+    private TelefoneDao telefoneDao;
+    private AlunoDao alunoDao;
+    private List<Telefone> telefones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adiciona_aluno);
+        telefoneDao = DataBase.getInstance(this).getTelefoneDao();
         configuraComponentes();
         verificaIntent();
     }
@@ -45,14 +52,15 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.activity_adiciona_aluno_menu_salvar) {
-            AlunoDao dao = DataBase.getInstance(this).getAlunoDao();
-            TelefoneDao telefoneDao = DataBase.getInstance(this).getTelefoneDao();
+            alunoDao = DataBase.getInstance(this).getAlunoDao();
+            telefoneDao = DataBase.getInstance(this).getTelefoneDao();
             aluno = getAluno();
             if (aluno.idValido()) {
-                dao.edita(aluno);
+                alunoDao.edita(aluno);
+                telefoneDao.atualizaTelefone(criaTelefoneFixo(aluno.getId()), criaTelefoneCelular(aluno.getId()));
             } else {
-                long idAluno = dao.salva(aluno);
-                telefoneDao.salvarTelefone(telefoneFixo(idAluno), telefoneCelular(idAluno));
+                long idAluno = alunoDao.salva(aluno);
+                telefoneDao.salvarTelefone(criaTelefoneFixo(idAluno), criaTelefoneCelular(idAluno));
             }
             finish();
         }
@@ -64,8 +72,20 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
         if (recuperaDados.hasExtra(ALUNO)) {
             aluno = (Aluno) recuperaDados.getSerializableExtra(ALUNO);
             preencheAluno(aluno);
+            preencheTelefone(aluno);
         } else {
             aluno = new Aluno();
+        }
+    }
+
+    private void preencheTelefone(Aluno aluno) {
+        telefones = telefoneDao.getTelefones(aluno.getId());
+        for (Telefone telefone : telefones) {
+            if (telefone.getTipo() == TELEFONE_FIXO) {
+                campoTelefoneFixo.setText(telefone.getNumero());
+            } else {
+                campoTelefoneCelular.setText(telefone.getNumero());
+            }
         }
     }
 
@@ -78,8 +98,6 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
 
     private void preencheAluno(Aluno aluno) {
         campoNome.setText(aluno.getNome());
-//        campoTelefoneFixo.setText(aluno.getTelefoneFixo());
-//        campoTelefoneCelular.setText(aluno.getTelefoneCelular());
         campoEmail.setText(aluno.getEmail());
     }
 
@@ -89,20 +107,41 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
         return aluno;
     }
 
-    private Telefone telefoneFixo(long idAluno) {
-        Telefone telefoneFixo = new Telefone();
-        telefoneFixo.setIdAluno(idAluno);
-        telefoneFixo.setNumero(getTelefoneFixo());
-        telefoneFixo.setTipo(TELEFONE_FIXO);
-        return telefoneFixo;
+    private Telefone criaTelefoneFixo(long idAluno) {
+        Telefone telefoneFixo;
+        if (telefones == null) {
+            telefoneFixo = new Telefone(getTelefoneFixo(), TELEFONE_FIXO, idAluno);
+            return telefoneFixo;
+        } else {
+            telefoneFixo = pegaTelefone(TELEFONE_FIXO);
+            if (telefoneFixo != null) {
+                telefoneFixo.setNumero(getTelefoneFixo());
+            }
+            return telefoneFixo;
+        }
     }
 
-    private Telefone telefoneCelular(long idAluno) {
-        Telefone telefoneCelular = new Telefone();
-        telefoneCelular.setIdAluno(idAluno);
-        telefoneCelular.setNumero(getTelefoneCelular());
-        telefoneCelular.setTipo(TELEFONE_CELULAR);
-        return telefoneCelular;
+    private Telefone criaTelefoneCelular(long idAluno) {
+        Telefone telefoneCelular;
+        if (telefones == null) {
+            telefoneCelular = new Telefone(getTelefoneCelular(), TELEFONE_CELULAR, idAluno);
+            return telefoneCelular;
+        } else {
+            telefoneCelular = pegaTelefone(TELEFONE_CELULAR);
+            if (telefoneCelular != null) {
+                telefoneCelular.setNumero(getTelefoneCelular());
+            }
+            return telefoneCelular;
+        }
+    }
+
+    private Telefone pegaTelefone(TipoTelefone tipoTelefone) {
+        for (Telefone telefone : telefones) {
+            if (telefone.getTipo() == tipoTelefone) {
+                return telefone;
+            }
+        }
+        return null;
     }
 
     private String getEmail() {
