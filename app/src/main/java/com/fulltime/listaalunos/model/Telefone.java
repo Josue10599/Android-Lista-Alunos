@@ -1,5 +1,6 @@
 package com.fulltime.listaalunos.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -8,7 +9,7 @@ import static androidx.room.ForeignKey.CASCADE;
 
 @Entity
 public class Telefone {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private long id;
     private String numero;
     private TipoTelefone tipo;
@@ -49,5 +50,11 @@ public class Telefone {
 
     public void setIdAluno(long idAluno) {
         this.idAluno = idAluno;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return numero + "";
     }
 }

@@ -73,6 +73,26 @@ class DataBaseMigration {
             database.execSQL("ALTER TABLE Aluno_new RENAME TO Aluno");
         }
     };
+    private static final Migration MIGRATION_6_7 = new Migration(6, 7) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `Telefone_new` (" +
+                    "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    " `numero` TEXT," +
+                    " `tipo` TEXT," +
+                    " `idAluno` INTEGER NOT NULL)");
+            database.execSQL("INSERT INTO Telefone_new (numero, tipo, idAluno) " +
+                    "SELECT numero, tipo, idAluno FROM Telefone");
+            database.execSQL("DROP TABLE Telefone");
+            database.execSQL("ALTER TABLE Telefone_new RENAME TO Telefone");
+        }
+    };
+    private static final Migration MIGRATION_7_8 = new Migration(7, 8) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+        }
+    };
     static final Migration[] MIGRATIONS = {MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4,
-            MIGRATION_4_5, MIGRATION_5_6};
+            MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8};
 }

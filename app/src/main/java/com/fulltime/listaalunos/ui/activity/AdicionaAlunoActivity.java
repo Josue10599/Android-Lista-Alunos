@@ -11,7 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.fulltime.listaalunos.R;
 import com.fulltime.listaalunos.database.DataBase;
 import com.fulltime.listaalunos.database.dao.AlunoDao;
+import com.fulltime.listaalunos.database.dao.TelefoneDao;
 import com.fulltime.listaalunos.model.Aluno;
+import com.fulltime.listaalunos.model.Telefone;
+
+import static com.fulltime.listaalunos.model.TipoTelefone.TELEFONE_CELULAR;
+import static com.fulltime.listaalunos.model.TipoTelefone.TELEFONE_FIXO;
 
 public class AdicionaAlunoActivity extends AppCompatActivity {
 
@@ -41,11 +46,13 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.activity_adiciona_aluno_menu_salvar) {
             AlunoDao dao = DataBase.getInstance(this).getAlunoDao();
+            TelefoneDao telefoneDao = DataBase.getInstance(this).getTelefoneDao();
             aluno = getAluno();
             if (aluno.idValido()) {
                 dao.edita(aluno);
             } else {
-                dao.salva(aluno);
+                long idAluno = dao.salva(aluno);
+                telefoneDao.salvarTelefone(telefoneFixo(idAluno), telefoneCelular(idAluno));
             }
             finish();
         }
@@ -78,10 +85,24 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
 
     private Aluno getAluno() {
         aluno.setNome(getNome());
-//        aluno.setTelefoneFixo(getTelefoneFixo());
-//        aluno.setTelefoneCelular(getTelefoneCelular());
         aluno.setEmail(getEmail());
         return aluno;
+    }
+
+    private Telefone telefoneFixo(long idAluno) {
+        Telefone telefoneFixo = new Telefone();
+        telefoneFixo.setIdAluno(idAluno);
+        telefoneFixo.setNumero(getTelefoneFixo());
+        telefoneFixo.setTipo(TELEFONE_FIXO);
+        return telefoneFixo;
+    }
+
+    private Telefone telefoneCelular(long idAluno) {
+        Telefone telefoneCelular = new Telefone();
+        telefoneCelular.setIdAluno(idAluno);
+        telefoneCelular.setNumero(getTelefoneCelular());
+        telefoneCelular.setTipo(TELEFONE_CELULAR);
+        return telefoneCelular;
     }
 
     private String getEmail() {

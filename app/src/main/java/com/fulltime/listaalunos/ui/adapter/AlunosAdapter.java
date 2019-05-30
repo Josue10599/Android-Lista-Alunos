@@ -58,7 +58,7 @@ public class AlunosAdapter extends BaseAdapter {
     private void getTelefone(int position, View view) {
         TextView textViewTelefone = view.findViewById(R.id.item_aluno_telefone);
         textViewTelefone.setText(String.format(context.getString(R.string.item_aluno_telefone),
-                telefoneDao.getTelefone(alunos.get(position).getId()).getNumero()));
+                telefoneDao.getTelefone(alunos.get(position).getId())));
     }
 
     private void getNome(int position, View view) {

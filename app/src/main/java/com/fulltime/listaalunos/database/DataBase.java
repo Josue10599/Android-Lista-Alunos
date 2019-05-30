@@ -14,7 +14,7 @@ import com.fulltime.listaalunos.database.dao.TelefoneDao;
 import com.fulltime.listaalunos.model.Aluno;
 import com.fulltime.listaalunos.model.Telefone;
 
-@Database(entities = {Aluno.class, Telefone.class}, version = 6, exportSchema = false)
+@Database(entities = {Aluno.class, Telefone.class}, version = 8, exportSchema = false)
 @TypeConverters({ConverteCalendar.class, ConverteTipoTelefone.class})
 public abstract class DataBase extends RoomDatabase {
 
