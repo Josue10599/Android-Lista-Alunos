@@ -11,7 +11,6 @@ import com.fulltime.listaalunos.ui.adapter.AlunosAdapter;
 import java.util.List;
 
 public class BuscaAlunosAsyncTask extends AsyncTask<Void, Void, List<Aluno>> {
-
     private final AlunoDao alunoDao;
     private AlunosAdapter alunosAdapter;
 
@@ -19,7 +18,6 @@ public class BuscaAlunosAsyncTask extends AsyncTask<Void, Void, List<Aluno>> {
         this.alunoDao = DataBase.getInstance(context).getAlunoDao();
         this.alunosAdapter = alunosAdapter;
     }
-
 
     @Override
     protected List<Aluno> doInBackground(Void... voids) {

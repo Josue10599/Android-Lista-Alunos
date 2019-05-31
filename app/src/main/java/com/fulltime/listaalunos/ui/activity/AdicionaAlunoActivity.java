@@ -22,7 +22,6 @@ import static com.fulltime.listaalunos.model.TipoTelefone.TELEFONE_CELULAR;
 import static com.fulltime.listaalunos.model.TipoTelefone.TELEFONE_FIXO;
 
 public class AdicionaAlunoActivity extends AppCompatActivity {
-
     private static final String ALUNO = "aluno";
 
     private EditText campoNome;
@@ -49,15 +48,12 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.activity_adiciona_aluno_menu_salvar) {
+            Telefone[] telefones = {getTelefoneFixo(aluno.getId()), getTelefoneCelular(aluno.getId())};
             aluno = getAluno();
             if (aluno.idValido()) {
-                new EditaAlunoAsyncTask(this, aluno, this::finish,
-                        criaTelefoneFixo(aluno.getId()), criaTelefoneCelular(aluno.getId()))
-                        .execute();
+                new EditaAlunoAsyncTask(this, aluno, this::finish, telefones).execute();
             } else {
-                new SalvaAlunoAsyncTask(this, this::finish,
-                        aluno, criaTelefoneFixo(aluno.getId()), criaTelefoneCelular(aluno.getId()))
-                        .execute();
+                new SalvaAlunoAsyncTask(this, aluno, this::finish, telefones).execute();
             }
         }
         return super.onOptionsItemSelected(item);
@@ -68,24 +64,25 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
         if (recuperaDados.hasExtra(ALUNO)) {
             aluno = (Aluno) recuperaDados.getSerializableExtra(ALUNO);
             preencheAluno(aluno);
-            preencheTelefone(aluno);
+            pegaTelefones(aluno);
         } else {
             aluno = new Aluno();
         }
     }
 
-    private void preencheTelefone(Aluno aluno) {
-        new BuscaTelefonesAsyncTask(this,
-                telefoneList -> {
-                    telefones = telefoneList;
-                    for (Telefone telefone : telefoneList) {
-                        if (telefone.getTipo() == TELEFONE_FIXO) {
-                            campoTelefoneFixo.setText(telefone.getNumero());
-                        } else {
-                            campoTelefoneCelular.setText(telefone.getNumero());
-                        }
-                    }
-                }, aluno.getId()).execute();
+    private void pegaTelefones(Aluno aluno) {
+        new BuscaTelefonesAsyncTask(this, aluno.getId(), this::preencheTelefone).execute();
+    }
+
+    private void preencheTelefone(List<Telefone> telefoneList) {
+        telefones = telefoneList;
+        for (Telefone telefone : telefoneList) {
+            if (telefone.getTipo() == TELEFONE_FIXO) {
+                campoTelefoneFixo.setText(telefone.getNumero());
+            } else {
+                campoTelefoneCelular.setText(telefone.getNumero());
+            }
+        }
     }
 
     private void configuraComponentes() {
@@ -106,40 +103,36 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
         return aluno;
     }
 
-    private Telefone criaTelefoneFixo(long idAluno) {
-        Telefone telefoneFixo;
-        if (telefones == null) {
-            telefoneFixo = new Telefone(getTelefoneFixo(), TELEFONE_FIXO, idAluno);
-            return telefoneFixo;
-        } else {
-            telefoneFixo = pegaTelefone(TELEFONE_FIXO);
-            if (telefoneFixo != null) {
-                telefoneFixo.setNumero(getTelefoneFixo());
-            }
-            return telefoneFixo;
-        }
+    private Telefone getTelefoneFixo(long idAluno) {
+        if (telefones == null)
+            return criaTelefone(idAluno, getTelefoneFixo(), TELEFONE_FIXO);
+        else
+            return modificaTelefone(TELEFONE_FIXO, getTelefoneFixo());
     }
 
-    private Telefone criaTelefoneCelular(long idAluno) {
-        Telefone telefoneCelular;
-        if (telefones == null) {
-            telefoneCelular = new Telefone(getTelefoneCelular(), TELEFONE_CELULAR, idAluno);
-            return telefoneCelular;
-        } else {
-            telefoneCelular = pegaTelefone(TELEFONE_CELULAR);
-            if (telefoneCelular != null) {
-                telefoneCelular.setNumero(getTelefoneCelular());
-            }
-            return telefoneCelular;
+    private Telefone getTelefoneCelular(long idAluno) {
+        if (telefones == null)
+            return criaTelefone(idAluno, getTelefoneCelular(), TELEFONE_CELULAR);
+        else
+            return modificaTelefone(TELEFONE_CELULAR, getTelefoneCelular());
+    }
+
+    private Telefone criaTelefone(long idAluno, String numeroTelefone, TipoTelefone tipoTelefone) {
+        return new Telefone(numeroTelefone, tipoTelefone, idAluno);
+    }
+
+    private Telefone modificaTelefone(TipoTelefone tipoTelefone, String numeroTelefone) {
+        Telefone telefone = pegaTelefone(tipoTelefone);
+        if (telefone != null) {
+            telefone.setNumero(numeroTelefone);
         }
+        return telefone;
     }
 
     private Telefone pegaTelefone(TipoTelefone tipoTelefone) {
-        for (Telefone telefone : telefones) {
-            if (telefone.getTipo() == tipoTelefone) {
+        for (Telefone telefone : telefones)
+            if (telefone.getTipo() == tipoTelefone)
                 return telefone;
-            }
-        }
         return null;
     }
 

@@ -10,12 +10,11 @@ import com.fulltime.listaalunos.model.Telefone;
 import java.util.List;
 
 public class BuscaTelefonesAsyncTask extends AsyncTask<Void, Void, List<Telefone>> {
-
     private final TelefoneDao telefoneDao;
     private final TelefonesEncontradosListener listener;
     private final long idAluno;
 
-    public BuscaTelefonesAsyncTask(Context context, TelefonesEncontradosListener listener, long id) {
+    public BuscaTelefonesAsyncTask(Context context, long id, TelefonesEncontradosListener listener) {
         this.telefoneDao = DataBase.getInstance(context).getTelefoneDao();
         this.listener = listener;
         this.idAluno = id;
