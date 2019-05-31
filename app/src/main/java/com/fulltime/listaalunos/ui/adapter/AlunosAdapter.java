@@ -8,22 +8,20 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.fulltime.listaalunos.R;
-import com.fulltime.listaalunos.database.DataBase;
-import com.fulltime.listaalunos.database.dao.TelefoneDao;
+import com.fulltime.listaalunos.asynctask.PegaTelefoneAsyncTask;
 import com.fulltime.listaalunos.model.Aluno;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlunosAdapter extends BaseAdapter {
 
     private final Context context;
     private final List<Aluno> alunos;
-    private final TelefoneDao telefoneDao;
 
-    public AlunosAdapter(Context context, List<Aluno> alunos) {
+    public AlunosAdapter(Context context) {
+        alunos = new ArrayList<>();
         this.context = context;
-        this.alunos = alunos;
-        telefoneDao = DataBase.getInstance(context).getTelefoneDao();
     }
 
     @Override
@@ -56,9 +54,13 @@ public class AlunosAdapter extends BaseAdapter {
     }
 
     private void getTelefone(int position, View view) {
-        TextView textViewTelefone = view.findViewById(R.id.item_aluno_telefone);
-        textViewTelefone.setText(String.format(context.getString(R.string.item_aluno_telefone),
-                telefoneDao.getTelefone(alunos.get(position).getId())));
+        final TextView textViewTelefone = view.findViewById(R.id.item_aluno_telefone);
+        new PegaTelefoneAsyncTask(context,
+                telefone -> {
+                    if (telefone != null) textViewTelefone.setText
+                            (String.format(context.getString(R.string.item_aluno_telefone), telefone));
+                    else textViewTelefone.setText("");
+                }, alunos.get(position).getId()).execute();
     }
 
     private void getNome(int position, View view) {

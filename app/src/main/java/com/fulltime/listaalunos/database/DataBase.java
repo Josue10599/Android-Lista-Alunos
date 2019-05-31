@@ -28,7 +28,6 @@ public abstract class DataBase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context, DataBase.class, AGENDA_DB)
                     .addMigrations(DataBaseMigration.MIGRATIONS)
-                    .allowMainThreadQueries()
                     .build();
         }
         return instance;

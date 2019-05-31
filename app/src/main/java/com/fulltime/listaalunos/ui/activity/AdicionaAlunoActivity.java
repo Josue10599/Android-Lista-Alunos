@@ -9,9 +9,9 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fulltime.listaalunos.R;
-import com.fulltime.listaalunos.database.DataBase;
-import com.fulltime.listaalunos.database.dao.AlunoDao;
-import com.fulltime.listaalunos.database.dao.TelefoneDao;
+import com.fulltime.listaalunos.asynctask.BuscaTelefonesAsyncTask;
+import com.fulltime.listaalunos.asynctask.EditaAlunoAsyncTask;
+import com.fulltime.listaalunos.asynctask.SalvaAlunoAsyncTask;
 import com.fulltime.listaalunos.model.Aluno;
 import com.fulltime.listaalunos.model.Telefone;
 import com.fulltime.listaalunos.model.TipoTelefone;
@@ -30,15 +30,12 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
     private EditText campoTelefoneCelular;
     private EditText campoEmail;
     private Aluno aluno;
-    private TelefoneDao telefoneDao;
-    private AlunoDao alunoDao;
     private List<Telefone> telefones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adiciona_aluno);
-        telefoneDao = DataBase.getInstance(this).getTelefoneDao();
         configuraComponentes();
         verificaIntent();
     }
@@ -52,17 +49,16 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.activity_adiciona_aluno_menu_salvar) {
-            alunoDao = DataBase.getInstance(this).getAlunoDao();
-            telefoneDao = DataBase.getInstance(this).getTelefoneDao();
             aluno = getAluno();
             if (aluno.idValido()) {
-                alunoDao.edita(aluno);
-                telefoneDao.atualizaTelefone(criaTelefoneFixo(aluno.getId()), criaTelefoneCelular(aluno.getId()));
+                new EditaAlunoAsyncTask(this, aluno, this::finish,
+                        criaTelefoneFixo(aluno.getId()), criaTelefoneCelular(aluno.getId()))
+                        .execute();
             } else {
-                long idAluno = alunoDao.salva(aluno);
-                telefoneDao.salvarTelefone(criaTelefoneFixo(idAluno), criaTelefoneCelular(idAluno));
+                new SalvaAlunoAsyncTask(this, this::finish,
+                        aluno, criaTelefoneFixo(aluno.getId()), criaTelefoneCelular(aluno.getId()))
+                        .execute();
             }
-            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -79,14 +75,17 @@ public class AdicionaAlunoActivity extends AppCompatActivity {
     }
 
     private void preencheTelefone(Aluno aluno) {
-        telefones = telefoneDao.getTelefones(aluno.getId());
-        for (Telefone telefone : telefones) {
-            if (telefone.getTipo() == TELEFONE_FIXO) {
-                campoTelefoneFixo.setText(telefone.getNumero());
-            } else {
-                campoTelefoneCelular.setText(telefone.getNumero());
-            }
-        }
+        new BuscaTelefonesAsyncTask(this,
+                telefoneList -> {
+                    telefones = telefoneList;
+                    for (Telefone telefone : telefoneList) {
+                        if (telefone.getTipo() == TELEFONE_FIXO) {
+                            campoTelefoneFixo.setText(telefone.getNumero());
+                        } else {
+                            campoTelefoneCelular.setText(telefone.getNumero());
+                        }
+                    }
+                }, aluno.getId()).execute();
     }
 
     private void configuraComponentes() {

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Dao
 public interface TelefoneDao {
-    @Query("SELECT * FROM Telefone WHERE idAluno = :alunoId LIMIT 1")
+    @Query("SELECT * FROM Telefone WHERE idAluno = :alunoId AND numero != '' LIMIT 1")
     Telefone getTelefone(long alunoId);
 
     @Insert
